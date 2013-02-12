@@ -1,4 +1,4 @@
 scala-hello-world
 =================
 
-Playing with scala + intelliJ setup
+Playing with scala + intelliJ + Maven setup
