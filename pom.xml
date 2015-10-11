@@ -9,9 +9,9 @@
     <version>1.0</version>
 
     <properties>
-        <scala.lang.version>2.9.2</scala.lang.version>
+        <scala.lang.version>2.11.4</scala.lang.version>
         <junit.version>4.11</junit.version>
-        <scala.test.version>1.9.1</scala.test.version>
+        <scala.test.version>2.2.4</scala.test.version>
     </properties>
 
      <repositories>
