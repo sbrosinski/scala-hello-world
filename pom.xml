@@ -12,22 +12,14 @@
         <scala.lang.version>2.11.4</scala.lang.version>
         <junit.version>4.11</junit.version>
         <scala.test.version>2.10</scala.test.version>
+        <scoverage.plugin.version>1.1.1</scoverage.plugin.version>
+        <scala.version>2.11.4</scala.version>
+        <scala.plugin.version>3.2.2</scala.plugin.version>
+
     </properties>
 
-     <repositories>
-        <repository>
-            <id>scala-tools.org</id>
-            <name>Scala-tools Maven2 Repository</name>
-            <url>http://scala-tools.org/repo-releases</url>
-        </repository>
-    </repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <id>scala-tools.org</id>
-            <name>Scala-tools Maven2 Repository</name>
-            <url>http://scala-tools.org/repo-releases</url>
-        </pluginRepository>
-    </pluginRepositories>
+
+
     <dependencies>
         <dependency>
             <groupId>org.scala-lang</groupId>
@@ -40,95 +32,117 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
-         <dependency>
-         	<groupId>org.scalatest</groupId>
-         	<artifactId>scalatest_2.11</artifactId>
-         	<version>2.2.5</version>
-         </dependency>
+        <dependency>
+            <groupId>org.scalatest</groupId>
+            <artifactId>scalatest_2.11</artifactId>
+            <version>2.2.5</version>
+        </dependency>
 
     </dependencies>
+
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>2.8</version>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>index</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+
+            <plugin>
+                <groupId>org.scoverage</groupId>
+                <artifactId>scoverage-maven-plugin</artifactId>
+                <version>${scoverage.plugin.version}</version>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>report</report> <!-- select only one report from: report, integration-report and report-only reporters -->
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+        </plugins>
+    </reporting>
+
     <build>
         <testSourceDirectory>src/test/scala</testSourceDirectory>
         <sourceDirectory>src/main/scala</sourceDirectory>
+
         <plugins>
             <plugin>
-                <groupId>org.scala-tools</groupId>
-                <artifactId>maven-scala-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                           <goal>compile</goal>
-                           <goal>testCompile</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.3</version>
                 <configuration>
-                    <scalaVersion>${scala.lang.version}</scalaVersion>
-                    <jvmArgs>
-                        <jvmArg>-client</jvmArg>
-                        <jvmArg>-Xms64m</jvmArg>
-                        <jvmArg>-Xmx1024m</jvmArg>
-                    </jvmArgs>
-                    <args>
-                        <arg>-deprecation</arg>
-                        <arg>-dependencyfile</arg>
-                        <arg>${project.build.directory}/.scala_dependencies</arg>
-                    </args>
+                    <skipMain>true</skipMain> <!-- skip compile -->
+                    <skip>true</skip> <!-- skip testCompile -->
                 </configuration>
             </plugin>
 
-<plugin>
-  <groupId>org.apache.maven.plugins</groupId>
-  <artifactId>maven-surefire-plugin</artifactId>
-  <version>2.7</version>
-  <configuration>
-    <skipTests>true</skipTests>
-  </configuration>
-</plugin>
-
-<plugin>
-  <groupId>org.scalatest</groupId>
-  <artifactId>scalatest-maven-plugin</artifactId>
-  <version>1.0</version>
-  <configuration>
-    <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
-    <junitxml>.</junitxml>
-    <filereports>WDF TestSuite.txt</filereports>
-  </configuration>
-  <executions>
-    <execution>
-      <id>test</id>
-      <goals>
-        <goal>test</goal>
-      </goals>
-    </execution>
-  </executions>
-</plugin>
             <plugin>
-            <groupId>org.scalastyle</groupId>
-            <artifactId>scalastyle-maven-plugin</artifactId>
-            <version>0.6.0</version>
-            <configuration>
-              <verbose>false</verbose>
-              <failOnViolation>true</failOnViolation>
-              <includeTestSourceDirectory>true</includeTestSourceDirectory>
-              <failOnWarning>false</failOnWarning>
-              <sourceDirectory>${basedir}/src/main/scala</sourceDirectory>
-              <testSourceDirectory>${basedir}/src/test/scala</testSourceDirectory>
-              <!--configLocation>${basedir}/lib/scalastyle_config.xml</configLocation-->
-              <outputFile>${project.build.directory}/scalastyle-output.xml</outputFile>
-              <outputEncoding>UTF-8</outputEncoding>
-            </configuration>
-            <executions>
-              <execution>
-                <goals>
-                  <goal>check</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-         </plugins>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.18.1</version>
+            </plugin>
+
+            <plugin>
+                <groupId>net.alchim31.maven</groupId>
+                <artifactId>scala-maven-plugin</artifactId>
+                <version>${scala.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>default-sbt-compile</id>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.scoverage</groupId>
+                <artifactId>scoverage-maven-plugin</artifactId>
+                <version>${scoverage.plugin.version}</version>
+                <configuration>
+                    <highlighting>true</highlighting>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.scalastyle</groupId>
+                <artifactId>scalastyle-maven-plugin</artifactId>
+                <version>0.6.0</version>
+                <configuration>
+                    <verbose>false</verbose>
+                    <failOnViolation>true</failOnViolation>
+                    <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                    <failOnWarning>false</failOnWarning>
+                    <sourceDirectory>${basedir}/src/main/scala</sourceDirectory>
+                    <testSourceDirectory>${basedir}/src/test/scala</testSourceDirectory>
+                    <!--configLocation>${basedir}/lib/scalastyle_config.xml</configLocation-->
+                    <outputFile>${project.build.directory}/scalastyle-output.xml</outputFile>
+                    <outputEncoding>UTF-8</outputEncoding>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+
+
     </build>
 
-    
+
 </project>
