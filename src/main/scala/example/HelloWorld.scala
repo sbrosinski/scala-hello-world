@@ -1,8 +1,4 @@
-/**
- * User: ninja
- * Date: 2/11/13
- * Time: 10:28 PM
- */
+package example
 
 trait Output {
   def print(s:String)=println(s)
